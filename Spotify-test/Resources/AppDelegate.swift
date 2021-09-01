@@ -32,6 +32,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // I added this line for  tabbar item color
         UITabBar.appearance().tintColor = .label
         
+//        print(AuthManager.shared.signInURL?.absoluteString)
+        
         return true
     }
 

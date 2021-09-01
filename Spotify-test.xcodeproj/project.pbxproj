@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		042FE41826DDE2A90023DD25 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042FE41726DDE2A90023DD25 /* Extensions.swift */; };
 		049E218B26DDD1FD00BD770D /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049E218A26DDD1FD00BD770D /* TabBarViewController.swift */; };
 		049E219026DDD27700BD770D /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049E218F26DDD27700BD770D /* SearchViewController.swift */; };
 		049E219326DDD28300BD770D /* LibraryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049E219226DDD28300BD770D /* LibraryViewController.swift */; };
@@ -32,6 +33,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		042FE41726DDE2A90023DD25 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		049E218A26DDD1FD00BD770D /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		049E218F26DDD27700BD770D /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		049E219226DDD28300BD770D /* LibraryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryViewController.swift; sourceTree = "<group>"; };
@@ -174,6 +176,7 @@
 			children = (
 				04AC18A926DDCF9200B44698 /* AppDelegate.swift */,
 				04AC18AB26DDCF9200B44698 /* SceneDelegate.swift */,
+				042FE41726DDE2A90023DD25 /* Extensions.swift */,
 				04AC18B226DDCF9400B44698 /* Assets.xcassets */,
 			);
 			path = Resources;
@@ -261,6 +264,7 @@
 				04AC18AA26DDCF9200B44698 /* AppDelegate.swift in Sources */,
 				049E21A926DDD33600BD770D /* ProfileViewController.swift in Sources */,
 				049E21C126DDD42400BD770D /* UserProfile.swift in Sources */,
+				042FE41826DDE2A90023DD25 /* Extensions.swift in Sources */,
 				049E219326DDD28300BD770D /* LibraryViewController.swift in Sources */,
 				049E21BE26DDD41500BD770D /* Artist.swift in Sources */,
 				049E21A626DDD31C00BD770D /* PlaylistViewController.swift in Sources */,
