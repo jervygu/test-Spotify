@@ -45,12 +45,10 @@ class ProfileTableViewCell: UITableViewCell {
                                   y: 0,
                                   width: (contentView.width*0.33)-16,
                                   height: contentView.height)
-//        titleLabel.backgroundColor = .systemRed
         valueLabel.frame = CGRect(x: titleLabel.right,
                                   y: 0,
                                   width: (contentView.width*0.66)-16,
                                   height: contentView.height)
-//        valueLabel.backgroundColor = .systemTeal
     }
     
     override func prepareForReuse() {
