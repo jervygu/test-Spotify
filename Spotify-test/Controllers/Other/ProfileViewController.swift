@@ -8,14 +8,20 @@
 import UIKit
 import SDWebImage
 
+struct ProfileData {
+    let title: String
+    let value: String
+}
+
 class ProfileViewController: UIViewController {
     
-    private var models = [String]()
+    private var models = [ProfileData]()
     
     private let tableView: UITableView = {
         let table = UITableView(frame: .zero, style: .plain)
         table.isHidden = true
         table.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        table.register(ProfileTableViewCell.self, forCellReuseIdentifier: ProfileTableViewCell.identifier)
         return table
     }()
 
@@ -55,18 +61,19 @@ class ProfileViewController: UIViewController {
         tableView.isHidden = false
         // configure table with model
         
-        models.append("Fullname: \(model.display_name)")
+        models.append(ProfileData(title: "Fullname", value: model.display_name))
         title = model.display_name
-        models.append("Email: \(model.email)")
-        models.append("User ID: \(model.id)")
+        models.append(ProfileData(title: "Email", value: model.email))
+        models.append(ProfileData(title: "User ID", value: model.id))
         
         guard let ff = model.followers?.total else {
             return
         }
-        models.append("Followers: \(String(describing: ff))")
-        
+        models.append(ProfileData(title: "Followers", value: String(ff)))
+        models.append(ProfileData(title: "Following", value: "1M"))
+        models.append(ProfileData(title: "Plan", value: model.product))
 //        models.append("Following: \(model.following?.artists.total)")
-        models.append("Plan: \(model.product)")
+//        models.append("Plan: \(model.product)")
         
         createTableHeader(with: model.images.first?.url)
         
@@ -111,8 +118,13 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = models[indexPath.row]
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfileTableViewCell.identifier, for: indexPath) as? ProfileTableViewCell else {
+            return UITableViewCell()
+        }
+        
+//        cell.textLabel?.text = models[indexPath.row].title
+        cell.configure(with: ProfileData(title: models[indexPath.row].title,
+                                         value: models[indexPath.row].value))
         cell.selectionStyle = .none
         return cell
     }
