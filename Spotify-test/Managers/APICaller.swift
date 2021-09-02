@@ -28,7 +28,7 @@ final class APICaller {
                     return
                 }
                 do {
-//                    let json = try JSONSerialization.jsonObject(with: safeData, options: .allowFragments)
+                    //let json = try JSONSerialization.jsonObject(with: safeData, options: .allowFragments)
                     let result = try JSONDecoder().decode(UserProfile.self, from: safeData)
                     print(result)
                     completion(.success(result))
@@ -50,7 +50,7 @@ final class APICaller {
                 }
                 do {
                     let result = try JSONDecoder().decode(NewReleasesResponse.self, from: safeData)
-                    //                    print(result)
+                    //print(result)
                     completion(.success(result))
                 } catch {
                     completion(.failure(error))
@@ -70,7 +70,7 @@ final class APICaller {
                 }
                 do {
                     let result = try JSONDecoder().decode(FeaturedPlaylistsReponse.self, from: safeData)
-//                    print(result)
+                    //print(result)
                     completion(.success(result))
                 } catch {
                     completion(.failure(error))
@@ -90,7 +90,7 @@ final class APICaller {
                 }
                 do {
                     let result = try JSONDecoder().decode(RecommendationGenresResponse.self, from: safeData)
-//                    print(result)
+                    //print(result)
                     completion(.success(result))
                 } catch {
                     completion(.failure(error))
@@ -101,10 +101,10 @@ final class APICaller {
     }
     
     /// Get Recommendations
-    public func getRecommendations(genres: Set<String>, completion: @escaping(Result<String, Error>) -> Void) {
+    public func getRecommendations(genres: Set<String>, completion: @escaping(Result<RecommendationsResponse, Error>) -> Void) {
         let seeds = genres.joined(separator: ",")
         
-        createRequest(with: URL(string: Constants.baseAPIURL + "/recommendations?seed_genres=\(seeds)&limit=10&market=PH"), with: .GET) { (request) in
+        createRequest(with: URL(string: Constants.baseAPIURL + "/recommendations?seed_genres=\(seeds)&limit=10&country=PH"), with: .GET) { (request) in
             // print("Recommended genre: ", request.url?.absoluteURL)
             let task = URLSession.shared.dataTask(with: request) { (data, _, error) in
                 guard let safeData = data, error == nil else {
@@ -112,8 +112,10 @@ final class APICaller {
                     return
                 }
                 do {
-                    let result = try JSONSerialization.jsonObject(with: safeData, options: .allowFragments)
+                    //let result = try JSONSerialization.jsonObject(with: safeData, options: .allowFragments)
+                    let result = try JSONDecoder().decode(RecommendationsResponse.self, from: safeData)
                     print(result)
+                    completion(.success(result))
                 } catch {
                     completion(.failure(error))
                 }
@@ -142,8 +144,8 @@ extension APICaller {
         case DELETE
     }
     
-    /// URLRequest with Authorization header
     // escaping completion block when we have to use closures inside our methods, and its going to be asynchronous
+    /// URLRequest with Authorization header
     private func createRequest(with url: URL?, with type: HTTPMethod, completion: @escaping(URLRequest) -> Void) {
         AuthManager.shared.withValidToken(completion: { token in
             guard let apiURL = url else {
@@ -158,4 +160,7 @@ extension APICaller {
             
         })
     }
+    
 }
+
+
