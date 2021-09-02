@@ -37,7 +37,7 @@ final class AuthManager {
         static let tokenAPIURL = "https://accounts.spotify.com/api/token"
         static let redirectURI = "https://jervygu.wixsite.com/iosdev"
         static let baseURL = "https://accounts.spotify.com/authorize"
-        static let scopes = "user-read-private%20playlist-modify-public%20playlist-read-private%20playlist-modify-private%20user-follow-read%20user-library-modify%20user-library-read%20user-read-email"
+        static let scopes = "user-read-private%20playlist-modify-public%20playlist-read-private%20playlist-modify-private%20user-follow-read%20user-library-modify%20user-library-read%20user-read-email%20user-read-recently-played"
     }
     
     private init() {}
@@ -195,6 +195,7 @@ final class AuthManager {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+//        request.setValue("user-read-recently-played", forHTTPHeaderField: "Authorization")
         
         request.httpBody = components.query?.data(using: .utf8)
         let basicToken = Constants.clientID + ":" + Constants.clientSecret

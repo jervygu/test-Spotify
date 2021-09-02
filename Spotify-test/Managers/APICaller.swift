@@ -124,6 +124,27 @@ final class APICaller {
         }
     }
     
+    /// Get Current User's Recently Played Tracks
+    public func getRecentPlayedTracks(completion: @escaping(Result<RecentlyPlayedTracksResponse, Error>) -> Void) {
+        createRequest(with: URL(string: Constants.baseAPIURL + "/me/player/recently-played?limit=15"), with: .GET) { (request) in
+            let task = URLSession.shared.dataTask(with: request) { (data, _, error) in
+                guard let safeData = data, error == nil else {
+                    completion(.failure(APIError.failedToGetData))
+                    return
+                }
+                do {
+//                    let result = try JSONSerialization.jsonObject(with: safeData, options: .allowFragments)
+                    let result = try JSONDecoder().decode(RecentlyPlayedTracksResponse.self, from: safeData)
+                    print(result)
+                    completion(.success(result))
+                } catch {
+                    completion(.failure(error))
+                }
+            }
+            task.resume()
+        }
+    }
+    
     
     
     
@@ -154,6 +175,7 @@ extension APICaller {
             var request = URLRequest(url: apiURL)
             // set value for Authorization header
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            
             request.httpMethod = type.rawValue
             request.timeoutInterval = 30
             completion(request)
