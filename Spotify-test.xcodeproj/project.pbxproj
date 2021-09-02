@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		042FE41826DDE2A90023DD25 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042FE41726DDE2A90023DD25 /* Extensions.swift */; };
+		043A509026E06F210033C59A /* NewReleasesResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043A508F26E06F210033C59A /* NewReleasesResponse.swift */; };
+		043A509326E0727C0033C59A /* Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043A509226E0727C0033C59A /* Album.swift */; };
+		043A509726E08CB20033C59A /* RecommendationGenresResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043A509626E08CB20033C59A /* RecommendationGenresResponse.swift */; };
 		0456927B26DF5B480072650A /* AuthResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0456927A26DF5B480072650A /* AuthResponse.swift */; };
 		0456927F26DF89E90072650A /* SettingsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0456927E26DF89E90072650A /* SettingsModels.swift */; };
 		049E218B26DDD1FD00BD770D /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049E218A26DDD1FD00BD770D /* TabBarViewController.swift */; };
@@ -38,6 +41,9 @@
 
 /* Begin PBXFileReference section */
 		042FE41726DDE2A90023DD25 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		043A508F26E06F210033C59A /* NewReleasesResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewReleasesResponse.swift; sourceTree = "<group>"; };
+		043A509226E0727C0033C59A /* Album.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Album.swift; sourceTree = "<group>"; };
+		043A509626E08CB20033C59A /* RecommendationGenresResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendationGenresResponse.swift; sourceTree = "<group>"; };
 		0456927A26DF5B480072650A /* AuthResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthResponse.swift; sourceTree = "<group>"; };
 		0456927E26DF89E90072650A /* SettingsModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModels.swift; sourceTree = "<group>"; };
 		049E218A26DDD1FD00BD770D /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
@@ -150,11 +156,14 @@
 			isa = PBXGroup;
 			children = (
 				0456927A26DF5B480072650A /* AuthResponse.swift */,
+				0456927E26DF89E90072650A /* SettingsModels.swift */,
+				049E21C026DDD42400BD770D /* UserProfile.swift */,
+				043A509226E0727C0033C59A /* Album.swift */,
+				049E21BD26DDD41500BD770D /* Artist.swift */,
 				049E21B726DDD40600BD770D /* Playlist.swift */,
 				049E21BA26DDD41000BD770D /* AudioTrack.swift */,
-				049E21BD26DDD41500BD770D /* Artist.swift */,
-				049E21C026DDD42400BD770D /* UserProfile.swift */,
-				0456927E26DF89E90072650A /* SettingsModels.swift */,
+				043A508F26E06F210033C59A /* NewReleasesResponse.swift */,
+				043A509626E08CB20033C59A /* RecommendationGenresResponse.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -343,12 +352,15 @@
 				049E219D26DDD2F400BD770D /* WelcomeViewController.swift in Sources */,
 				049E218B26DDD1FD00BD770D /* TabBarViewController.swift in Sources */,
 				04AC18AE26DDCF9200B44698 /* HomeViewController.swift in Sources */,
+				043A509026E06F210033C59A /* NewReleasesResponse.swift in Sources */,
 				049E21B526DDD3ED00BD770D /* HapticsManager.swift in Sources */,
 				0456927B26DF5B480072650A /* AuthResponse.swift in Sources */,
 				04E8E30D26DFA04C0076E065 /* ProfileTableViewCell.swift in Sources */,
 				049E21BB26DDD41000BD770D /* AudioTrack.swift in Sources */,
 				049E219926DDD2E900BD770D /* AuthViewController.swift in Sources */,
+				043A509326E0727C0033C59A /* Album.swift in Sources */,
 				04AC18AA26DDCF9200B44698 /* AppDelegate.swift in Sources */,
+				043A509726E08CB20033C59A /* RecommendationGenresResponse.swift in Sources */,
 				049E21A926DDD33600BD770D /* ProfileViewController.swift in Sources */,
 				049E21C126DDD42400BD770D /* UserProfile.swift in Sources */,
 				042FE41826DDE2A90023DD25 /* Extensions.swift in Sources */,

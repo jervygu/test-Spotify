@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             AuthManager.shared.refreshAccessTokenIfNeeded(completion: nil)
             window.rootViewController = TabBarViewController()
         } else {
-            let navVC = UINavigationC ontroller(rootViewController: WelcomeViewController())
+            let navVC = UINavigationController(rootViewController: WelcomeViewController())
             navVC.navigationBar.prefersLargeTitles = true
             navVC.viewControllers.first?.navigationItem.largeTitleDisplayMode = .always
             window.rootViewController = navVC
