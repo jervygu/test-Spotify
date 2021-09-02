@@ -42,7 +42,7 @@ final class APICaller {
     
     /// Get All New Releases
     public func getNewReleases(completion: @escaping(Result<NewReleasesResponse, Error>) -> Void) {
-        createRequest(with: URL(string: Constants.baseAPIURL + "/browse/new-releases?country=PH&limit=20"), with: .GET) { (request) in
+        createRequest(with: URL(string: Constants.baseAPIURL + "/browse/new-releases?country=PH&limit=15"), with: .GET) { (request) in
             let task = URLSession.shared.dataTask(with: request) { data, _, error in
                 guard let safeData = data, error == nil else {
                     completion(.failure(APIError.failedToGetData))
@@ -114,7 +114,7 @@ final class APICaller {
                 do {
                     //let result = try JSONSerialization.jsonObject(with: safeData, options: .allowFragments)
                     let result = try JSONDecoder().decode(RecommendationsResponse.self, from: safeData)
-                    print(result)
+//                    print(result)
                     completion(.success(result))
                 } catch {
                     completion(.failure(error))
