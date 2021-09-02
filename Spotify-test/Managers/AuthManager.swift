@@ -164,13 +164,13 @@ final class AuthManager {
     }
     
     /// Requesting a refreshed access token; Spotify returns a new access token to your app
-    public func refreshAccessTokenIfNeeded(completion: @escaping(Bool) -> Void) {
+    public func refreshAccessTokenIfNeeded(completion: ((Bool) -> Void)?)  { // bofore: @escaping(Bool) -> Void)
         guard !refreshingToken else {
             return
         }
         
         guard shouldRefreshToken else {
-            completion(true)
+            completion?(true)
             return
         }
         
@@ -201,7 +201,7 @@ final class AuthManager {
         let tokenData = basicToken.data(using: .utf8)
         guard let base64TokenString = tokenData?.base64EncodedString() else {
             print("Failed to get base64 Token")
-            completion(false)
+            completion?(false)
             return
         }
         
@@ -211,7 +211,7 @@ final class AuthManager {
         let task = URLSession.shared.dataTask(with: request) { [weak self] (data, _, error) in
             self?.refreshingToken = false
             guard let safeData = data, error == nil else {
-                completion(false)
+                completion?(false)
                 return
             }
             
@@ -223,10 +223,10 @@ final class AuthManager {
                 self?.onRefreshBlocks.removeAll()
                 self?.cacheToken(result: result)
                 print("SUCCESS Refresh Token: - \(result)")
-                completion(true)
+                completion?(true)
             } catch {
                 print(error.localizedDescription)
-                completion(false)
+                completion?(false)
             }
         }
         task.resume()

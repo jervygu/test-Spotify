@@ -36,7 +36,7 @@ class SettingsViewController: UIViewController {
     }
     
     private func configureModels() {
-        sections.append(Section(title: "View Your Profile", options: [Option(title: "Profile", handler: { [weak self] in
+        sections.append(Section(title: "Profile", options: [Option(title: "View Your Profile", handler: { [weak self] in
             DispatchQueue.main.async {
                 self?.viewProfile()
             }
