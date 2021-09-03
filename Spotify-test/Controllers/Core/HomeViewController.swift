@@ -17,7 +17,21 @@ enum BrowseSectionType {
     var title: String {
         switch self {
         case .newReleases:
-            return "New Releases for you"
+            let hour = Calendar.current.component(.hour, from: Date())
+            switch hour {
+            case 6..<12:
+                return "Good morning"
+            case 12:
+                return "Good noon"
+            case 13..<17:
+                return "Good afternoon"
+            case 17..<22:
+                print(NSLocalizedString("Evening", comment: "Evening"))
+                return "Good evening"
+            default:
+                return "Good night"
+            }
+        //return "New Releases for you"
         case .featuredPlaylists:
             return "Featured playlists"
         case .recommmendedTracks:
@@ -72,6 +86,9 @@ class HomeViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         collectionView.frame = view.bounds
+        
+        
+        
     }
     
     private func configureCollectionView() {
@@ -230,7 +247,7 @@ class HomeViewController: UIViewController {
             return RecentPlayedTracksCellViewModel(
                 name: $0.track.name,
                 artworkURL: URL(string: $0.track.album?.images.first?.url ?? ""),
-                artistName: $0.track.artists.first?.name ?? "",
+                artistName: $0.track.artists.first?.name ?? "-",
                 track_number: $0.track.track_number)
         })))
         

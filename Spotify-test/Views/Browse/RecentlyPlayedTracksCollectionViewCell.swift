@@ -35,6 +35,8 @@ class RecentlyPlayedTracksCollectionViewCell: UICollectionViewCell {
     }()
     
     
+    
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.backgroundColor = .systemBackground
@@ -70,9 +72,9 @@ class RecentlyPlayedTracksCollectionViewCell: UICollectionViewCell {
         
         trackNameLabel.frame = CGRect(
             x: 0,
-            y: playlistCoverImageView.height,
+            y: playlistCoverImageView.bottom,
             width: contentView.width,
-            height: (contentView.height-imageSize)*0.66)
+            height: (contentView.height-imageSize)*0.60)
 //        trackNameLabel.backgroundColor = .systemTeal
         
         
@@ -80,7 +82,7 @@ class RecentlyPlayedTracksCollectionViewCell: UICollectionViewCell {
             x: 0,
             y: trackNameLabel.bottom,
             width: contentView.width,
-            height: (contentView.height-imageSize)*0.33)
+            height: (contentView.height-imageSize)*0.40)
 //        artistNameLabel.backgroundColor = .systemIndigo
         
         

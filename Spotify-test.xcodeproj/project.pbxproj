@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		04229FCD26E1CFBC007F73BF /* RecentPlayedTracksCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04229FCC26E1CFBC007F73BF /* RecentPlayedTracksCellViewModel.swift */; };
 		042FE41826DDE2A90023DD25 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042FE41726DDE2A90023DD25 /* Extensions.swift */; };
 		043A509026E06F210033C59A /* NewReleasesResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043A508F26E06F210033C59A /* NewReleasesResponse.swift */; };
 		043A509326E0727C0033C59A /* Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043A509226E0727C0033C59A /* Album.swift */; };
@@ -50,6 +51,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		04229FCC26E1CFBC007F73BF /* RecentPlayedTracksCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentPlayedTracksCellViewModel.swift; sourceTree = "<group>"; };
 		042FE41726DDE2A90023DD25 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		043A508F26E06F210033C59A /* NewReleasesResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewReleasesResponse.swift; sourceTree = "<group>"; };
 		043A509226E0727C0033C59A /* Album.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Album.swift; sourceTree = "<group>"; };
@@ -182,6 +184,7 @@
 				043A50AE26E0D7F70033C59A /* NewReleasesCellViewModel.swift */,
 				043A50B426E0DB1E0033C59A /* FeaturedPlaylistsCellViewModel.swift */,
 				043A50BA26E0DBFA0033C59A /* RecommendedTracksCellViewModel.swift */,
+				04229FCC26E1CFBC007F73BF /* RecentPlayedTracksCellViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -401,6 +404,7 @@
 				043A509A26E095F60033C59A /* RecommendationsResponse.swift in Sources */,
 				049E21BB26DDD41000BD770D /* AudioTrack.swift in Sources */,
 				049E219926DDD2E900BD770D /* AuthViewController.swift in Sources */,
+				04229FCD26E1CFBC007F73BF /* RecentPlayedTracksCellViewModel.swift in Sources */,
 				043A50AB26E0D7610033C59A /* NewReleaseCollectionViewCell.swift in Sources */,
 				043A509326E0727C0033C59A /* Album.swift in Sources */,
 				04AC18AA26DDCF9200B44698 /* AppDelegate.swift in Sources */,
