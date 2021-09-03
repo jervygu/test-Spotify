@@ -8,11 +8,11 @@
 import UIKit
 
 enum BrowseSectionType {
-    case newReleases(viewModels: [NewReleasesCellViewModel])
-    case featuredPlaylists(viewModels: [FeaturedPlaylistsCellViewModel])
-    case recommmendedTracks(viewModels: [RecommendedTracksCellViewModel])
-    case recentlyPlayedTracks(viewModels: [RecentPlayedTracksCellViewModel])
-//    case currentUserPlaylists(viewModels: [NewReleasesCellViewModel])
+    case newReleases(viewModels: [NewReleasesCellViewModel])                    //0
+    case featuredPlaylists(viewModels: [FeaturedPlaylistsCellViewModel])        //1
+    case recommmendedTracks(viewModels: [RecommendedTracksCellViewModel])       //2
+    case recentlyPlayedTracks(viewModels: [RecentPlayedTracksCellViewModel])    //3
+    case currentUserPlaylists(viewModels: [CurrentUserPlaylistsCellViewModel])  //4
     
     var title: String {
         switch self {
@@ -36,10 +36,10 @@ enum BrowseSectionType {
             return "Featured playlists"
         case .recommmendedTracks:
             return "Random tracks"
-//        case .currentUserPlaylists:
-//            return "Your playlists"
         case .recentlyPlayedTracks:
             return "Recently played"
+        case .currentUserPlaylists:
+            return "Your playlists"
         }
     }
 }
@@ -49,7 +49,7 @@ class HomeViewController: UIViewController {
     private var playlists: [Playlist] = []
     private var tracks: [AudioTrack] = []
     private var recentTracks: [RecentTracks] = []
-//    private var userPlaylists: [Playlist] = []
+    private var userPlaylists: [Playlist] = []
     
     private var collectionView: UICollectionView = UICollectionView(
         frame: .zero,
@@ -66,28 +66,100 @@ class HomeViewController: UIViewController {
     }()
     
     private var sections = [BrowseSectionType]()
+    
+    private let gradient: CAGradientLayer = {
+        let gradient = CAGradientLayer()
+//        gradient.colors = [UIColor.random().cgColor, UIColor.systemBackground]
+        gradient.colors = [UIColor.systemGray.cgColor, UIColor.systemBackground]
+        gradient.startPoint = CGPoint(x: 0.0, y: 0.0)
+        gradient.endPoint = CGPoint(x: 0.3, y: 1.0)
+        
+        return gradient
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        view.layer.addSublayer(gradient)
+        
+        
         title = "Browse"
         view.backgroundColor = .systemBackground
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "gear"),
-                                                            style: .done,
-                                                            target: self,
-                                                            action: #selector(didTapSettings))
-        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "gear"),
+            style: .done,
+            target: self,
+            action: #selector(didTapSettings))
         
         configureCollectionView()
         view.addSubview(spinner)
         fetchData()
+        
+        addLongTapGesture()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        
+        
+        // gradient
+        
+        view.frame = CGRect(x: 0, y: 0, width: view.width, height: view.height)
+        gradient.frame = CGRect(x: 0,
+                                y: 0-view.safeAreaInsets.top,
+                                width: view.width,
+                                height: view.height/4)
+        
+        collectionView.layer.insertSublayer(gradient, at: 0)
+        
+        
         collectionView.frame = view.bounds
+    }
+    
+    private func addLongTapGesture() {
+        let gesture = UILongPressGestureRecognizer(target: self, action: #selector(didLongPress(_:)))
         
+        collectionView.isUserInteractionEnabled = true
+        collectionView.addGestureRecognizer(gesture)
+    }
+    
+    @objc func didLongPress(_ gesture: UILongPressGestureRecognizer) {
         
+        guard gesture.state == .began else {
+            return
+        }
+        
+        let touchPoint = gesture.location(in: collectionView)
+        print("point: \(touchPoint)")
+        
+        guard let indexPath = collectionView.indexPathForItem(at: touchPoint), indexPath.section == 2 else {
+            return
+        }
+        
+        let model = tracks[indexPath.row]
+        
+        let actionSheet = UIAlertController(
+            title: model.name,
+            message: "Would you like to add this to a playlist?",
+            preferredStyle: .actionSheet)
+        
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        
+        actionSheet.addAction(UIAlertAction(title: "Add to Playlist", style: .default, handler: { [weak self] _ in
+            DispatchQueue.main.async {
+                let vc = LibraryPlaylistsViewController()
+                vc.selectionHandler = { playlist in
+                    APICaller.shared.addTrackToPlaylist(track: model, playlist: playlist) { success in
+                        print("Added to Playlist success: \(success)")
+                    }
+                }
+                vc.title = "Select Playlist"
+                self?.present(UINavigationController(rootViewController: vc), animated: true, completion: nil)
+            }
+        }))
+        
+        present(actionSheet, animated: true)
         
     }
     
@@ -100,10 +172,14 @@ class HomeViewController: UIViewController {
         collectionView.register(RecommendedTracksCollectionViewCell.self, forCellWithReuseIdentifier: RecommendedTracksCollectionViewCell.identifier)
         collectionView.register((RecentlyPlayedTracksCollectionViewCell.self), forCellWithReuseIdentifier: RecentlyPlayedTracksCollectionViewCell.identifier)
         
+        
         collectionView.register(
             TitleHeaderCollectionReusableView.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
             withReuseIdentifier: TitleHeaderCollectionReusableView.identifier)
+        
+        
+        collectionView.register(UserPlaylistsCollectionViewCell.self, forCellWithReuseIdentifier: UserPlaylistsCollectionViewCell.identifier)
         
         
         collectionView.dataSource = self
@@ -117,12 +193,15 @@ class HomeViewController: UIViewController {
         dispatchGroup.enter()
         dispatchGroup.enter()
         dispatchGroup.enter()
-//        dispatchGroup.enter()
+        dispatchGroup.enter()
+        dispatchGroup.enter()
         
         var newReleases: NewReleasesResponse?
         var featuredPlaylists: FeaturedPlaylistsReponse?
         var recommedations: RecommendationsResponse?
         var recentTracks: RecentlyPlayedTracksResponse?
+        
+        var currentUserPlaylists: [Playlist]?
         
         // New Releases
         APICaller.shared.getNewReleases(completion: { (result) in
@@ -183,6 +262,10 @@ class HomeViewController: UIViewController {
         
         // User's Recently played tracks
         APICaller.shared.getRecentPlayedTracks { (result) in
+            defer {
+                dispatchGroup.leave()
+            }
+            
             switch result {
             case .success(let model):
                 recentTracks = model
@@ -191,16 +274,32 @@ class HomeViewController: UIViewController {
             }
         }
         
+        // CurrentUser playlists
+        APICaller.shared.getCurrentUserPlaylists { ( result ) in
+            defer {
+                dispatchGroup.leave()
+            }
+
+            switch result {
+            case .success(let playlists):
+                currentUserPlaylists = playlists
+            case .failure(let error):
+                print(error.localizedDescription)
+                break
+            }
+        }
+        
         dispatchGroup.notify(queue: .main) {
             guard let newReleasedAlbums = newReleases?.albums.items,
                   let playlists = featuredPlaylists?.playlists.items,
                   let recommendedTracks = recommedations?.tracks,
-                  let recentTracks = recentTracks?.items
+                  let recentTracks = recentTracks?.items,
+                  let userPlaylists = currentUserPlaylists
             else {
                 return
             }
             
-            self.configureModels(newAlbums: newReleasedAlbums, playlists: playlists, tracks: recommendedTracks, recentTracks: recentTracks)
+            self.configureModels(newAlbums: newReleasedAlbums, playlists: playlists, tracks: recommendedTracks, recentTracks: recentTracks, userPlaylists: userPlaylists)
         }
         
     }
@@ -209,16 +308,18 @@ class HomeViewController: UIViewController {
     private func configureModels(newAlbums: [Album],
                                  playlists: [Playlist],
                                  tracks: [AudioTrack],
-                                 recentTracks: [RecentTracks]) {
+                                 recentTracks: [RecentTracks],
+                                 userPlaylists: [Playlist]) {
         self.newReleasedAlbums = newAlbums
         self.playlists = playlists
         self.tracks = tracks
         self.recentTracks = recentTracks
+        self.userPlaylists = userPlaylists
         //        print(newAlbums.count)
         //        print(playlists.count)
         //        print(tracks.count)
+        //        print(userPlaylists.count)
         
-        //
         sections.append(.newReleases(viewModels: newAlbums.compactMap({
             return NewReleasesCellViewModel(
                 name: $0.name,
@@ -250,6 +351,13 @@ class HomeViewController: UIViewController {
                 artistName: $0.track.artists.first?.name ?? "-",
                 track_number: $0.track.track_number)
         })))
+        sections.append(.currentUserPlaylists(viewModels: userPlaylists.compactMap({
+            return CurrentUserPlaylistsCellViewModel(
+                name: $0.name,
+                artworkURL: URL(string: $0.images.first?.url ?? "-"),
+                numberOfTracks: $0.tracks.total,
+                creatorName: $0.owner.display_name)
+        })))
         
         collectionView.reloadData()
     }
@@ -275,6 +383,8 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         case .recommmendedTracks(let viewModels):
             return viewModels.count
         case .recentlyPlayedTracks(let viewModels):
+            return viewModels.count
+        case .currentUserPlaylists(let viewModels):
             return viewModels.count
         }
     }
@@ -323,13 +433,53 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
             cell.configure(withModel: viewModel)
             return cell
             
+        case .currentUserPlaylists(let viewModels):
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: UserPlaylistsCollectionViewCell.identifier, for: indexPath) as? UserPlaylistsCollectionViewCell else {
+                return UICollectionViewCell()
+            }
+            
+            let viewModel = viewModels[indexPath.row]
+            cell.configure(withModel: viewModel)
+            return cell
+            
         }
     }
     
-    
-}
-
-extension HomeViewController {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        let section = sections[indexPath.section]
+        
+        switch section {
+        case .newReleases:
+            let album = newReleasedAlbums[indexPath.row]
+            let vc = AlbumViewController(album: album)
+            vc.title = album.name
+            vc.navigationItem.largeTitleDisplayMode = .never
+            navigationController?.pushViewController(vc, animated: true)
+            
+        case .featuredPlaylists:
+            let playlist =  playlists[indexPath.row]
+            let vc = PlaylistViewController(playlist: playlist)
+            vc.title = playlist.name
+            vc.navigationItem.largeTitleDisplayMode = .never
+            navigationController?.pushViewController(vc, animated: true)
+            
+        case .recommmendedTracks:
+            let track = tracks[indexPath.row]
+            PlaybackPresenter.shared.startPlayback(fromVC: self, track: track)
+            
+        case .recentlyPlayedTracks:
+            let recentTrack = recentTracks[indexPath.row].track
+            PlaybackPresenter.shared.startPlayback(fromVC: self, track: recentTrack)
+            
+        case .currentUserPlaylists:
+            let uPlaylists =  userPlaylists[indexPath.row]
+            let vc = PlaylistViewController(playlist: uPlaylists)
+            vc.title = uPlaylists.name
+            vc.navigationItem.largeTitleDisplayMode = .never
+            navigationController?.pushViewController(vc, animated: true)
+        }
+    }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         guard let header = collectionView.dequeueReusableSupplementaryView(
@@ -347,6 +497,9 @@ extension HomeViewController {
     }
     
     
+}
+
+extension HomeViewController {
     // Collection View Layout - Compositional Layout
     
     /// Create Section Layout

@@ -35,6 +35,7 @@ class AuthViewController: UIViewController, WKNavigationDelegate {
         view.backgroundColor = .systemBackground
         webView.navigationDelegate = self
         view.addSubview(webView)
+        navigationController?.navigationBar.tintColor = .label
         
         guard let url = AuthManager.shared.signInURL else {
             return
@@ -45,7 +46,10 @@ class AuthViewController: UIViewController, WKNavigationDelegate {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        webView.frame = view.bounds
+        webView.frame = CGRect(x: 0,
+                               y: view.safeAreaInsets.top,
+                               width: view.width,
+                               height: view.height-view.safeAreaInsets.top)
     }
     
     

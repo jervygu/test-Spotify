@@ -21,7 +21,7 @@ class TitleHeaderCollectionReusableView: UICollectionReusableView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .systemBackground
+        backgroundColor = .clear
         addSubview(label)
     }
     
